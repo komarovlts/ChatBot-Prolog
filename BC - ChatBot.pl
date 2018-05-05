@@ -1,0 +1,3 @@
+%Hechos
+
+%Reglas
