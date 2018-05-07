@@ -25,7 +25,7 @@ contar([X|L],C):- contar(L,C_ant), C is C_ant+1.
 %LLamada: contar([1,2,3], LEN).
 */
 
-
+% atom_concat('Usuario: ', 'Hola', X).
 % X is random(10).
 % get_time(T), stamp_date_time(T, date(Y, MO, D, H, M, S, _, _, _), 'local').
 % https://www.tek-tips.com/viewthread.cfm?qid=1612213
