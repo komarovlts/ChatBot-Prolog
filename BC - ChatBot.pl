@@ -1,12 +1,9 @@
 %Hechos
-iC1(0).
-iC2(1,0).
-iC3(1,1).
 %Constructor:
-cb(0).
-cb(1).
-seed(0).
-seed(1).
+cb(0,0).
+cb1(0,1).
+cb2(1,0).
+cb3(1,1).
 
 %Reglas
 %Pertenencia (Log):
@@ -27,16 +24,16 @@ beginDialog(Chatbot, InputLog, Seed, OutputLog):-
      get_time(T), stamp_date_time(T, date(_, _, _, Hour, _, _, _, _, _), 'local'),
      horaYfechaActual(StringTime),
      agregar(InputLog, NuevoInputLog, "|BeginDialog|"),
-     inicioConversacion(Chatbot, NuevoInputLog, Hour, StringTime, PrevioOutputLog),
+     inicioConversacion(Chatbot, NuevoInputLog, Seed, Hour, StringTime, PrevioOutputLog),
      agregar(PrevioOutputLog, OutputLog, "|Nombre|").
 %Llamada: beginDialog(1,[],0,OutputLog).
-inicioConversacion(Chatbot, InputLog, Hour, StringTime, OutputLog):-
-     (iC1(Chatbot), (Hour >= 6), (Hour < 12), string_concat(StringTime, "Chatbot: Buenos Dias, Cual es tu nombre?", String1), agregar(InputLog, OutputLog, String1)),!;
-     (iC1(Chatbot), (Hour >= 12), (Hour < 20), string_concat(StringTime, "Chatbot: Buenas Tardes, Cual es tu nombre?", String2), agregar(InputLog, OutputLog, String2)),!;
-     (iC1(Chatbot), (Hour > 20), string_concat(StringTime, "Chatbot: Buenas Noches, Cual es tu nombre?", String3), agregar(InputLog, OutputLog, String3)),!;
-     (iC1(Chatbot), (Hour < 6), (Hour >= 0), string_concat(StringTime, "Chatbot: Buenas, Cual es tu nombre?", String4), agregar(InputLog, OutputLog, String4)),!;
-     (iC2(Chatbot,Seed), string_concat(StringTime, "Chatbot: Hola!, Como te llamai?", String5), agregar(InputLog, OutputLog, String5)),!;
-     (iC3(Chatbot,Seed), string_concat(StringTime, "Chatbot: Buena!, Como te llamas?", String6), agregar(InputLog, OutputLog, String6)).
+inicioConversacion(Chatbot, InputLog, Seed, Hour, StringTime, OutputLog):-
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour >= 6), (Hour < 12), string_concat(StringTime, "Chatbot: Buenos Dias, Cual es tu nombre?", String1), agregar(InputLog, OutputLog, String1)),!;
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour >= 12), (Hour < 20), string_concat(StringTime, "Chatbot: Buenas Tardes, Cual es tu nombre?", String2), agregar(InputLog, OutputLog, String2)),!;
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour > 20), string_concat(StringTime, "Chatbot: Buenas Noches, Cual es tu nombre?", String3), agregar(InputLog, OutputLog, String3)),!;
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour < 6), (Hour >= 0), string_concat(StringTime, "Chatbot: Buenas, Cual es tu nombre?", String4), agregar(InputLog, OutputLog, String4)),!;
+     (cb2(Chatbot,Seed), string_concat(StringTime, "Chatbot: Hola!, Como te llamai?", String5), agregar(InputLog, OutputLog, String5)),!;
+     (cb3(Chatbot,Seed), string_concat(StringTime, "Chatbot: Buena!, Como te llamas?", String6), agregar(InputLog, OutputLog, String6)).
 
 sendMessage(Msg, Chatbot, InputLog, Seed, OutputLog):-
      getLast(InputLog, OutputLog).
