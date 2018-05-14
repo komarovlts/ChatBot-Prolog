@@ -10,10 +10,6 @@ cb3(1,1).
 esLog([]).
 esLog([X|Xs]):-
      string(X).
-%Pertenencia (Chatbot):
-esChatbot([]).
-esChatbot([X|Xs]):-
-     (X = 0;X = 1).
 
 % Agregar elemento ELEM a una lista
 agregar([], [ELEM], ELEM).
