@@ -34,20 +34,36 @@ inicioConversacion(Chatbot, InputLog, Seed, Hour, StringTime, OutputLog):-
 sendMessage(Msg, Chatbot, InputLog, Seed, OutputLog):-
      getLast(InputLog, OutputLog).
 
+endDialog(Chatbot, InputLog, Seed, OutputLog):-
+     get_time(T), stamp_date_time(T, date(_, _, _, Hour, _, _, _, _, _), 'local'),
+     horaYfechaActual(StringTime),
+     finalizarConversacion(Chatbot, InputLog, Seed, Hour, StringTime, PrevioOutputLog),
+     agregar(PrevioOutputLog, OutputLog, "|EndDialog|").
+%Llamada: endDialog(1,[loganterior],0,OutputLog).
+finalizarConversacion(Chatbot, InputLog, Seed, Hour, StringTime, OutputLog):-
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour >= 6), (Hour < 12), string_concat(StringTime, "Chatbot: Espero haberte sido de utilidad, que tengas un buen día,¡Adios!.", String1), agregar(InputLog, OutputLog, String1)),!;
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour >= 12), (Hour < 20), string_concat(StringTime, "Chatbot: Espero haberte sido de utilidad, que tengas una buena tarde,¡Adios!.", String2), agregar(InputLog, OutputLog, String2)),!;
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour > 20), string_concat(StringTime, "Chatbot: Espero haberte sido de utilidad, que tengas un buena noche,¡Adios!.", String3), agregar(InputLog, OutputLog, String3)),!;
+     ((cb(Chatbot,Seed);cb1(Chatbot,Seed)), (Hour < 6), (Hour >= 0), string_concat(StringTime, "Chatbot: Espero haberte sido de utilidad, ¡Hasta luego!.", String4), agregar(InputLog, OutputLog, String4)),!;
+     (cb2(Chatbot,Seed), string_concat(StringTime, "Chatbot: Chao, ¡Nos vimoh!.", String5), agregar(InputLog, OutputLog, String5)),!;
+     (cb3(Chatbot,Seed), string_concat(StringTime, "Chatbot: Dale compa, ¡Nos vemos!.", String6), agregar(InputLog, OutputLog, String6)).
+
 horaYfechaActual(StringTime):-
      get_time(T), stamp_date_time(T, date(Y, MO, D, H, M, S, _, _, _), 'local'),
      S2 is round(S),
-     string_concat(D,"/", UNO),
-     string_concat(UNO, MO, DOS),
-     string_concat(DOS,"/", TRES),
-     string_concat(TRES, Y, CUATRO),
-     string_concat(CUATRO, " ", CINCO),
-     string_concat(CINCO, H, SEIS),
-     string_concat(SEIS, ":", SIETE),
-     string_concat(SIETE, M, OCHO),
-     string_concat(OCHO, ":", NUEVE),
-     string_concat(NUEVE, S2, DIEZ),
-     string_concat(DIEZ, " ", StringTime).
+     string_concat("[", D, UNO),
+     string_concat(UNO,"/", DOS),
+     string_concat(DOS, MO, TRES),
+     string_concat(TRES,"/", CUATRO),
+     string_concat(CUATRO, Y, CINCO),
+     string_concat(CINCO, " ", SEIS),
+     string_concat(SEIS, H, SIETE),
+     string_concat(SIETE, ":", OCHO),
+     string_concat(OCHO, M, NUEVE),
+     string_concat(NUEVE, ":", DIEZ),
+     string_concat(DIEZ, S2, ONCE),
+     string_concat(ONCE, "]", DOCE),
+     string_concat(DOCE, " ", StringTime).
 
 getLast([], X).
 getLast([X], X).
